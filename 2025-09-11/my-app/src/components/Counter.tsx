@@ -9,14 +9,6 @@ function Counter() {
   }
 
   return (
-    /*     <>
-      <h1>Vite + React + Kristjan</h1>
-      <div className="card">
-        <button onClick={() => setCount(count => count + 1)}>
-          count is {count}
-        </button>
-      </div>
-    </> */
     <>
       <h1>Vite + React + Kristjan</h1>
       <div className="card">
