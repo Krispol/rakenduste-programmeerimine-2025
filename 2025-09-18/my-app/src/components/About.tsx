@@ -19,7 +19,7 @@ function About() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log({ name, email, message });
-    alert("Your message was intercepted by Skynet");
+    alert("Your message was intercepted by Skynet, human...");
     setName("");
     setEmail("");
     setMessage("");

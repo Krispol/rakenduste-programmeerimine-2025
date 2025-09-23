@@ -6,7 +6,23 @@ import Contact from "./components/Contact";
 import About from "./components/About";
 import HelloBtn from "./components/HelloBtn";
 import DrawerAppBar from "./components/DrawerAppBar";
-//import "./index.css";
+import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
+
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+    primary: {
+      main: "#04be23ff",
+    },
+    secondary: {
+      main: "#f48fb1",
+    },
+    background: {
+      default: "#121212",
+      paper: "#1e1e1e",
+    },
+  },
+});
 
 const router = createHashRouter([
   {
@@ -23,6 +39,8 @@ const router = createHashRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ThemeProvider theme={darkTheme}>
+      <RouterProvider router={router} />
+    </ThemeProvider>
   </React.StrictMode>
 );
