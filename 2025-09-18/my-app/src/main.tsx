@@ -6,7 +6,7 @@ import Contact from "./components/Contact";
 import About from "./components/About";
 import HelloBtn from "./components/HelloBtn";
 import DrawerAppBar from "./components/DrawerAppBar";
-import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material";
 
 const darkTheme = createTheme({
   palette: {
