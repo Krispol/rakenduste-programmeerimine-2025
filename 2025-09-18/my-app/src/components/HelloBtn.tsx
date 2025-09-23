@@ -1,5 +1,4 @@
 import { Box, Button } from "@mui/material";
-import "../App.css";
 
 function HelloBtn() {
   return (

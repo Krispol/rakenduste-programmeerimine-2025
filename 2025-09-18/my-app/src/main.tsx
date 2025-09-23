@@ -1,21 +1,21 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { RouterProvider, createHashRouter } from "react-router";
-import "./index.css";
-import App from "./App";
+import { RouterProvider, createHashRouter } from "react-router-dom";
 import Home from "./components/Home";
 import Contact from "./components/Contact";
 import About from "./components/About";
 import HelloBtn from "./components/HelloBtn";
+import DrawerAppBar from "./components/DrawerAppBar";
+//import "./index.css";
 
 const router = createHashRouter([
   {
     path: "/",
-    element: <App />,
+    element: <DrawerAppBar />,
     children: [
       { path: "/", element: <Home /> },
-      { path: "/about", element: <About /> },
       { path: "/contact", element: <Contact /> },
+      { path: "/about", element: <About /> },
       { path: "/HelloBtn", element: <HelloBtn /> },
     ],
   },
