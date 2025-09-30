@@ -60,3 +60,19 @@ exports.delete = (req, res) => {
   todo.updatedAt = Date.now();
   res.sendStatus(204);
 };
+
+exports.read = (req, res) => {
+  const includeDeleted =
+    req.query.includeDeleted === "true" || req.query.includeDeleted === "1";
+  const list = includeDeleted ? todos : todos.filter((t) => !t.deleted);
+  res.json(list);
+};
+
+exports.restore = (req, res) => {
+  const { id } = req.params;
+  const todo = todos.find((t) => t.id === id);
+  if (!todo) return res.status(404).json({ error: "todo not found" });
+  todo.deleted = false;
+  todo.updatedAt = Date.now();
+  res.json(todo);
+};

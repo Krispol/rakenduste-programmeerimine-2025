@@ -26,4 +26,6 @@ router.put(
 
 router.delete("/:id", todosController.delete);
 
+router.put("/:id/restore", todosController.restore);
+
 module.exports = router;
