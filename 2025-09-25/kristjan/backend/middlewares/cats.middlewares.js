@@ -8,4 +8,4 @@ const catsGetRouteMiddleware = (req, res, next) => {
   next();
 };
 
-module.exports = { catsRouteMiddleware, catsGetRouteMiddleware };
+module.exports = { catsRouteMiddleware, catsGetRouteMiddleware }; 

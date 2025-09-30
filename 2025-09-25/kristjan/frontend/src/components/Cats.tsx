@@ -10,43 +10,85 @@ type Cat = {
   deleted: boolean;
 };
 
-const Cats = () => {
+const Cats: React.FC = () => {
   const [cats, setCats] = useState<Cat[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchCats = async () => {
-    const response = await fetch("http://localhost:3000/cats");
-    const data = await response.json();
-
-    setCats(data);
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await fetch("http://localhost:3000/cats");
+      if (!res.ok) throw new Error(`GET /cats failed: ${res.status}`);
+      const data = await res.json();
+      setCats(data);
+    } catch (e: any) {
+      setError(e.message ?? "Failed to fetch cats");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     fetchCats();
   }, []);
 
+  const editCat = async (id: string) => {
+    const current = cats.find((c) => c.id === id);
+    if (!current) return;
+
+    const newName = window.prompt("Edit cat name:", current.name);
+    if (!newName || newName.trim() === "" || newName === current.name) return;
+
+    const res = await fetch(`http://localhost:3000/cats/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ name: newName }),
+    });
+
+    if (res.ok) {
+      await fetchCats();
+    } else {
+      console.warn("Update failed");
+    }
+  };
+
+  const deleteCat = async (id: string) => {
+    const res = await fetch(`http://localhost:3000/cats/${id}`, {
+      method: "DELETE",
+    });
+
+    if (res.ok || res.status === 204) {
+      await fetchCats();
+    } else {
+      console.warn("Delete failed");
+    }
+  };
+
   return (
-    <Box>
-      <Typography variant="h1">Cats</Typography>
-      <CatsList cats={cats} />
+    <div>
+      <h1>Cats</h1>
+
       <SubmitCat fetchCats={fetchCats} />
-    </Box>
-  );
-};
 
-type CatsListProps = {
-  cats: Cat[];
-};
+      {loading && <p>Loading…</p>}
+      {error && <p>{error}</p>}
 
-// const CatsList: React.FC<CatsListProps> = (props) => {
-//   const { cats, age } = props;
-//   console.log(age);
-const CatsList: React.FC<CatsListProps> = ({ cats }) => {
-  return (
-    <List>
-      {cats.map((cat) => (
-        <ListItem key={cat.id}>{JSON.stringify(cat)}</ListItem>
-      ))}
-    </List>
+      <ul>
+        {cats.map((cat) => (
+          <li key={cat.id}>
+            {cat.name} <button onClick={() => editCat(cat.id)}>Edit</button>{" "}
+            <button onClick={() => deleteCat(cat.id)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+
+      {cats.length === 0 && !loading && !error && <p>No cats.</p>}
+    </div>
   );
 };
 
