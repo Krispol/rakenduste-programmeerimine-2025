@@ -1,4 +1,13 @@
-import { Box, List, ListItem, Typography } from "@mui/material";
+import {
+  List,
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
+  IconButton,
+  Typography,
+} from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import React, { useEffect, useState } from "react";
 import SubmitCat from "./SubmitCat";
 
@@ -71,23 +80,50 @@ const Cats: React.FC = () => {
 
   return (
     <div>
-      <h1>Cats</h1>
+      <Typography variant="h4" gutterBottom>
+        Cats CRUD
+      </Typography>
 
       <SubmitCat fetchCats={fetchCats} />
 
-      {loading && <p>Loading…</p>}
-      {error && <p>{error}</p>}
+      {loading && <Typography>Loading…</Typography>}
+      {error && <Typography color="error">{error}</Typography>}
 
-      <ul>
+      <List>
         {cats.map((cat) => (
-          <li key={cat.id}>
-            {cat.name} <button onClick={() => editCat(cat.id)}>Edit</button>{" "}
-            <button onClick={() => deleteCat(cat.id)}>Delete</button>
-          </li>
+          <ListItem key={cat.id} divider>
+            <ListItemText
+              primary={cat.name}
+              secondary={`Created: ${new Date(cat.createdAt).toLocaleString()}${
+                cat.updatedAt
+                  ? ` • Updated: ${new Date(cat.updatedAt).toLocaleString()}`
+                  : ""
+              }`}
+            />
+            <ListItemSecondaryAction>
+              <IconButton
+                edge="end"
+                onClick={() => editCat(cat.id)}
+                aria-label="edit"
+              >
+                <EditIcon />
+              </IconButton>
+              <IconButton
+                edge="end"
+                onClick={() => deleteCat(cat.id)}
+                aria-label="delete"
+                color="error"
+              >
+                <DeleteIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
         ))}
-      </ul>
+      </List>
 
-      {cats.length === 0 && !loading && !error && <p>No cats.</p>}
+      {cats.length === 0 && !loading && !error && (
+        <Typography>No cats yet. Add one above.</Typography>
+      )}
     </div>
   );
 };
