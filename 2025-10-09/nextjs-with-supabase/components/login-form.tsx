@@ -1,4 +1,4 @@
-"use client"; //react leht
+"use client";
 
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";

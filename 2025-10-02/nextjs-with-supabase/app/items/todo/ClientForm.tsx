@@ -1,75 +1,96 @@
 "use client";
 
-import { useTransition } from "react";
-import { createTodo, deleteTodo } from "./actions";
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { createTodo, deleteTodo, updateTodo } from "./actions";
 
 export function ClientCreateForm() {
   const [pending, start] = useTransition();
+  const router = useRouter();
 
   return (
     <form
-      action={(fd) => start(() => createTodo(fd))}
-      className="flex items-center gap-2"
+      action={(fd) =>
+        start(async () => {
+          await createTodo(fd);
+          router.refresh();
+        })
+      }
     >
-      <input
-        name="content"
-        required
-        placeholder="Add a task…"
-        className="flex-1 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm placeholder-gray-400
-                   focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500
-                   disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder-zinc-500"
-        disabled={pending}
-      />
-      <button
-        disabled={pending}
-        className="inline-flex items-center gap-2 rounded-md bg-emerald-600 px-3 py-2 text-sm font-medium text-white
-                   hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2
-                   disabled:cursor-not-allowed disabled:opacity-60 dark:focus:ring-offset-zinc-900"
-      >
-        {pending ? (
-          <>
-            <svg
-              className="h-4 w-4 animate-spin"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-                fill="none"
-              />
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8v4A4 4 0 004 12z"
-              />
-            </svg>
-            Adding…
-          </>
-        ) : (
-          "Add"
-        )}
-      </button>
+      <input name="content" required placeholder="Add a task…" />
+      <button disabled={pending}>{pending ? "Adding…" : "Add"}</button>
     </form>
   );
 }
 
 export function ClientDeleteButton({ id }: { id: string }) {
   const [pending, start] = useTransition();
+  const router = useRouter();
 
   return (
-    <form action={() => start(() => deleteTodo(id))}>
+    <form
+      action={(fd) =>
+        start(async () => {
+          await deleteTodo(fd);
+          router.refresh();
+        })
+      }
+    >
+      <input type="hidden" name="id" value={id} />
+      <button disabled={pending}>{pending ? "…" : "delete"}</button>
+    </form>
+  );
+}
+
+export function ClientEdit({
+  id,
+  initialContent,
+}: {
+  id: string;
+  initialContent: string;
+}) {
+  const [editing, setEditing] = useState(false);
+  const [value, setValue] = useState(initialContent);
+  const [pending, start] = useTransition();
+  const router = useRouter();
+
+  if (!editing) {
+    return (
+      <button type="button" onClick={() => setEditing(true)}>
+        edit
+      </button>
+    );
+  }
+
+  return (
+    <form
+      action={(fd) =>
+        start(async () => {
+          await updateTodo(fd);
+          setEditing(false);
+          router.refresh();
+        })
+      }
+    >
+      <input type="hidden" name="id" value={id} />
+      <input
+        name="content"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        autoFocus
+      />
+      <button type="submit" disabled={pending}>
+        {pending ? "Saving…" : "Save"}
+      </button>
       <button
+        type="button"
+        onClick={() => {
+          setEditing(false);
+          setValue(initialContent);
+        }}
         disabled={pending}
-        className="text-sm font-medium text-red-600 hover:text-red-700 hover:underline
-                   disabled:cursor-not-allowed disabled:opacity-50"
-        aria-label="Delete todo"
       >
-        {pending ? "…" : "delete"}
+        cancel
       </button>
     </form>
   );
