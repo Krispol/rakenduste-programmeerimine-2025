@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { InfoIcon } from "lucide-react";
 import { FetchDataSteps } from "@/components/tutorial/fetch-data-steps";
 
+//serveripoolne
 export default async function ProtectedPage() {
   const supabase = await createClient();
 
