@@ -1,13 +1,14 @@
 type Search = { url?: string };
 
 export default async function Page({ searchParams }: { searchParams: Search }) {
-  const url = searchParams?.url;
+  const defaultUrl = "https://swapi.dev/api/people/1";
+
+  const url = searchParams?.url || defaultUrl;
   let data: any = null;
   let error: string | null = null;
 
   if (url) {
     try {
-      // Basic safety: allow only http/https
       const u = new URL(url);
       if (u.protocol !== "http:" && u.protocol !== "https:") {
         throw new Error("Only http/https URLs are allowed.");
@@ -17,7 +18,6 @@ export default async function Page({ searchParams }: { searchParams: Search }) {
       if (!res.ok)
         throw new Error(`Fetch failed: ${res.status} ${res.statusText}`);
 
-      // Assumes JSON; adjust if you need text/HTML
       data = await res.json();
     } catch (e: any) {
       error = e?.message ?? "Unknown error";
@@ -28,12 +28,11 @@ export default async function Page({ searchParams }: { searchParams: Search }) {
     <main style={{ padding: 20 }}>
       <h1>Server-side fetch (no client JS)</h1>
 
-      {/* Minimal form: GET submits ?url=... back to this page */}
       <form method="get" style={{ marginBottom: 12 }}>
         <input
           type="url"
           name="url"
-          placeholder="Enter API URL"
+          placeholder="https://swapi.dev/api/people/1"
           defaultValue={url ?? ""}
           required
           style={{ width: "60%" }}
@@ -43,7 +42,6 @@ export default async function Page({ searchParams }: { searchParams: Search }) {
         </button>
       </form>
 
-      {/* Render states: nothing by default; show error or JSON after submit */}
       {error && <p style={{ color: "red" }}>{error}</p>}
       {data && (
         <pre style={{ whiteSpace: "pre-wrap" }}>

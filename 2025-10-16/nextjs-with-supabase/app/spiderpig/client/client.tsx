@@ -4,7 +4,7 @@ import { useState } from "react";
 
 export default function ClientFetcher() {
   const [url, setUrl] = useState("https://swapi.dev/api/people/1");
-  const [data, setData] = useState<any>(null); // fetched data
+  const [data, setData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -30,7 +30,6 @@ export default function ClientFetcher() {
 
   return (
     <div>
-      {/* form */}
       <form onSubmit={handleFetch}>
         <input
           type="url"
@@ -43,7 +42,6 @@ export default function ClientFetcher() {
         <button type="submit">Fetch</button>
       </form>
 
-      {/* states */}
       {loading && <p>Loading</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
       {data && <pre>{JSON.stringify(data, null, 2)}</pre>}
