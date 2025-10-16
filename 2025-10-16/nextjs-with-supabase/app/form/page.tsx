@@ -4,7 +4,7 @@ import { Button, Checkbox, Group, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import "@mantine/core/styles.css";
 
-export default function Demo() {
+export default function Form() {
   const form = useForm({
     mode: "uncontrolled",
     initialValues: {
@@ -40,3 +40,12 @@ export default function Demo() {
     </form>
   );
 }
+
+/* Vormi nõuded:
+
+1. Eesnimi
+2. Perekonnanimi
+3. E-mail
+4. Telefoni number
+5. Kuupäev ja kellaaeg
+6. Tekst (vabas vormis lisatav tekst) */
