@@ -3,6 +3,7 @@
 ### Create
 
 POST http://localhost:3000/api/todos/
+
 body (raw):
 
 - {
@@ -20,6 +21,7 @@ GET http://localhost:3000/api/todos/
 ### Update
 
 PUT http://localhost:3000/api/todos/{id}
+
 body (raw):
 
 - {
