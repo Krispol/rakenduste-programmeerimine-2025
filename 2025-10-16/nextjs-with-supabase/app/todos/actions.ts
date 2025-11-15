@@ -14,7 +14,7 @@ export async function addTodo(formData: FormData) {
     throw new Error(error.message);
   }
 
-  revalidatePath("/todo");
+  revalidatePath("/todos");
 }
 
 export async function getTodos() {
@@ -48,7 +48,7 @@ export async function updateTodo(formData: FormData) {
     throw new Error(error.message);
   }
 
-  revalidatePath("/todo");
+  revalidatePath("/todos");
 }
 
 
@@ -64,5 +64,5 @@ export async function deleteTodo(formData: FormData){
     throw new Error(error.message);
   }
 
-  revalidatePath("/todo");
+  revalidatePath("/todos");
 }
