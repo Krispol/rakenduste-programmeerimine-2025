@@ -3,6 +3,7 @@ import { AuthButton } from "@/components/auth-button";
 import { EnvVarWarning } from "@/components/env-var-warning";
 import { hasEnvVars } from "@/lib/utils";
 import Link from "next/link";
+import { TodoItem } from "@/components/todo-item";
 
 export const dynamic = "force-dynamic";
 
@@ -44,25 +45,12 @@ export default async function TodoPage() {
           ) : (
             <ul className="grid gap-2">
               {todos.map((t: any) => (
-                <li
+                <TodoItem
                   key={t.id}
-                  className="rounded-lg border border-gray-200 bg-white p-3"
-                >
-                  <div className="text-base">{t.content}</div>
-                  <div className="mt-1 text-xs text-gray-500">
-                    {new Date(t.created_at).toLocaleString()}
-                  </div>
-                  <form action={deleteTodo}>
-                    <input type="hidden" name="id" value={t.id} />
-                    <button
-                      type="submit"
-                      className="rounded-md border border-gray-300 px-2 py-1 text-xs text-gray-700 hover:bg-gray-50"
-                      aria-label={`Delete ${t.content}`}
-                    >
-                      Delete
-                    </button>
-                  </form>
-                </li>
+                  id={t.id}
+                  content={t.content}
+                  created_at={t.created_at}
+                />
               ))}
             </ul>
           )}

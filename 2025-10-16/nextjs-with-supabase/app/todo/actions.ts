@@ -31,6 +31,26 @@ export async function getTodos() {
   return data ?? [];
 }
 
+export async function updateTodo(formData: FormData) {
+  const id = String(formData.get("id") ?? "");
+  const content = String(formData.get("content") ?? "").trim();
+  if (!id || !content) return;
+
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("todos")
+    .update({ content })
+    .eq("id", id);
+  
+  if (error) {
+    console.error("updateTodo error:", error);
+    throw new Error(error.message);
+  }
+
+  revalidatePath("/todo");
+}
+
 
 export async function deleteTodo(formData: FormData){
   const id = String(formData.get("id") ?? "");
