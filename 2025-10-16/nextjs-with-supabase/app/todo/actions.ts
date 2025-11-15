@@ -1,13 +1,14 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { supabaseServer } from "@/lib/supabase-server";
+import { createClient } from "@/lib/server";
 
 export async function addTodo(formData: FormData) {
   const content = String(formData.get("content") ?? "").trim();
   if (!content) return;
 
-  const { error } = await supabaseServer().from("todo").insert({ content });
+  const supabase = await createClient();
+  const { error } = await supabase.from("todos").insert({ content });
   if (error) {
     console.error("addTodo error:", error);
     throw new Error(error.message);
@@ -17,9 +18,9 @@ export async function addTodo(formData: FormData) {
 }
 
 export async function getTodos() {
-  const supabase = supabaseServer();
+  const supabase = await createClient();
   const { data, error } = await supabase
-    .from("todo")
+    .from("todos")
     .select("*")
     .order("created_at", { ascending: false });
 
@@ -35,9 +36,9 @@ export async function deleteTodo(formData: FormData){
   const id = String(formData.get("id") ?? "");
   if (!id) return;
 
-  const supabase = supabaseServer();
+  const supabase = await createClient();
 
-  const { error } = await supabase.from("todo").delete().eq("id", id);
+  const { error } = await supabase.from("todos").delete().eq("id", id);
   if (error) {
     console.error("deleteTodo error:", error);
     throw new Error(error.message);
